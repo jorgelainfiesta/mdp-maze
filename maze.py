@@ -29,9 +29,9 @@ class MazeCSV (MProblem):
         rows = int(rawline[0].strip())
         cols = int(rawline[1].strip())
         #Read probabilities for actions
-        probs = float(rawline[2].strip()), float(rawline[3].strip()), float(rawline[4].strip())
+        self.distribution = float(rawline[2].strip()), float(rawline[3].strip()), float(rawline[4].strip())
         #Error
-        if sum(probs) != 1.0:
+        if sum(self.distribution) != 1.0:
             print("Probabilities must sum 1.0")
             return
         #Build the map
@@ -48,6 +48,12 @@ class MazeCSV (MProblem):
             maze.append(row)
 #        print(maze)
         self.maze = maze
+        self.actions = {
+            "up" : ["up", "right", "left"],
+            "down" : ["down", "right", "left"],
+            "left" : ["left", "up", "bottom"],
+            "right" : ["right", "bottom", "up"]
+        }
     
     #Returns the state after moving with an action a
     def move(self, s1, a):
@@ -69,11 +75,23 @@ class MazeCSV (MProblem):
     
     #Returns the possible states after applying an action
     def applyAction(self, s1, a):
-        pass
-        
+        if a in self.actions:
+            res = {}
+            #For each possible action ac from action a
+            for i in range(len(self.actions[a])):
+                ac = self.actions[a][i]
+                res[ac] = {'state' : self.move(s1, ac), 'prob' : self.distribution[i]}
+            return res
+
     #Returns the probability of getting to s2 after applying a to s1
     def transitionProb(self, s1, a, s2):
-        pass
+        possibles = self.applyAction(s1, a)
+        res = 0.0
+        for p in possibles:
+            poss = possibles[p]
+            if poss['state'] == s2:
+                res += poss['prob']
+        return res
     
     def printMap(self):
         for row in self.maze:
@@ -84,9 +102,10 @@ class MazeCSV (MProblem):
 
 if __name__ == '__main__':
     m = MazeCSV('maps/sample1.csv')
-    m.applyAction((0, 0), 'a')
+    m.applyAction((0, 0), 'up')
+    m.transitionProb((0,0), 'up', (5,5))
     m.printMap()
-    print(m.move((4, 1), 'up'))
-    print(m.move((4, 1), 'down'))
-    print(m.move((4, 1), 'left'))
-    print(m.move((4, 1), 'right'))
+#    print(m.move((4, 1), 'up'))
+#    print(m.move((4, 1), 'down'))
+#    print(m.move((4, 1), 'left'))
+#    print(m.move((4, 1), 'right'))
