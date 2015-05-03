@@ -14,13 +14,20 @@ class MProblem:
     #Returns the reward of a given state
     def reward(self, s):
         pass
+    def value(self, s, new=None):
+        pass
+    #Returns the non-absorbing states
+    def states():
+        pass
 
 '''
 A Maze loaded from CSV that holds info for a MDP problem
 The state is the position (x, y) of the cursor.
 '''
 class MazeCSV (MProblem):
-    def __init__(self, url):
+    def __init__(self, url, absorbent = 100):
+        #Set absorbent
+        self.absorbent = absorbent
         #Load CSV
         f = open(url, 'r')
         rawline = f.readline().split(",")
@@ -42,13 +49,18 @@ class MazeCSV (MProblem):
             for j in range(cols):
                 item = rawline[5 + i * cols + j].strip()
                 if item != 'x':
-                    row.append({'val' : 0, 'cost' : int(item)})
+                    cost = int(item)
+                    if abs(cost) == self.absorbent:
+                        row.append({'val' :  cost, 'reward' : cost})
+                    else:
+                        row.append({'val' :  0, 'reward' : -1*cost})
+                        
                 else:
                     row.append({'val' : None})
             maze.append(row)
 #        print(maze)
         self.maze = maze
-        self.actions = {
+        self.actionsDesc = {
             "up" : ["up", "right", "left"],
             "down" : ["down", "right", "left"],
             "left" : ["left", "up", "bottom"],
@@ -73,13 +85,17 @@ class MazeCSV (MProblem):
                 res = (y, x+1)
         return res
     
+    #Return the possible actions
+    def actions(self):
+        return self.actionsDesc.keys()
+    
     #Returns the possible states after applying an action
     def applyAction(self, s1, a):
-        if a in self.actions:
+        if a in self.actionsDesc:
             res = {}
             #For each possible action ac from action a
-            for i in range(len(self.actions[a])):
-                ac = self.actions[a][i]
+            for i in range(len(self.actionsDesc[a])):
+                ac = self.actionsDesc[a][i]
                 res[ac] = {'state' : self.move(s1, ac), 'prob' : self.distribution[i]}
             return res
 
@@ -93,17 +109,54 @@ class MazeCSV (MProblem):
                 res += poss['prob']
         return res
     
+    def reward(self, s1):
+        y, x = s1
+        return self.maze[y][x]['reward']
+    
+    def value(self, s1, val=None):
+        y, x = s1
+        if not val:
+            return self.maze[y][x]['val']
+        else:
+            self.maze[y][x]['val'] = val
+    
     def printMap(self):
         for row in self.maze:
             line = ""
             for item in row:
                 line += str(item['val']) + "\t"
             print(line)
-
+            
+    #Returns the non-absorbing states
+    def states(self):
+        res = []
+        for y in range(len(self.maze)):
+            for x in range(len(self.maze[0])):
+                if self.maze[y][x]['val'] != None and abs(self.maze[y][x]['val']) != self.absorbent:
+                    res.append((y, x))
+        return res
+    #Prints the policies to a CSV
+    def toCSV(self, url):
+        if not self.policy:
+            raise Exception("No policy defined for this problem")
+        else:
+            res = "%s, %s, %s, %s, %s" % (len(self.maze), len(self.maze[0]), self.distribution[0], self.distribution[1], self.distribution[2])
+            print(self.policy)
+            for y in range(len(self.maze)):
+                for x in range(len(self.maze[0])):
+                    if self.maze[y][x]['val'] == None:
+                        res += ", x"
+                    elif abs(self.maze[y][x]['val']) == self.absorbent:
+                        res += ", %s" % self.maze[y][x]['val']
+                    else:
+                        res += ", %s" % self.policy[(y, x)]
+            with open(url, 'w') as f:
+                f.write(res)
+                                          
 if __name__ == '__main__':
     m = MazeCSV('maps/sample1.csv')
     m.applyAction((0, 0), 'up')
-    m.transitionProb((0,0), 'up', (5,5))
+    trm.transitionProb((0,0), 'up', (5,5))
     m.printMap()
 #    print(m.move((4, 1), 'up'))
 #    print(m.move((4, 1), 'down'))

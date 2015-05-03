@@ -31,6 +31,7 @@ class MDPSolver:
                     p.value(state, maxval)
                     self.policy[state] = maxac
                     changes += 1
+        p.policy = self.policy
     
         
 
@@ -42,3 +43,4 @@ if __name__ == '__main__':
     solver = MDPSolver(m)
     solver.calculateValues()
     m.printMap()
+    m.toCSV("policies/sample0.csv")
