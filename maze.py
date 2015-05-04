@@ -25,13 +25,16 @@ A Maze loaded from CSV that holds info for a MDP problem
 The state is the position (x, y) of the cursor.
 '''
 class MazeCSV (MProblem):
-    def __init__(self, url, absorbent = 100):
+    def __init__(self, url, strline = False, absorbent = 100):
         #Set absorbent
         self.absorbent = absorbent
         #Load CSV
-        f = open(url, 'r')
-        rawline = f.readline().split(",")
-        f.close()
+        if not strline:
+            f = open(url, 'r')
+            rawline = f.readline().split(",")
+            f.close()
+        else:
+            rawline = url
         #Read rows and cols count
         rows = int(rawline[0].strip())
         cols = int(rawline[1].strip())
@@ -152,6 +155,18 @@ class MazeCSV (MProblem):
                         res += ", %s" % self.policy[(y, x)]
             with open(url, 'w') as f:
                 f.write(res)
+    #Maps everything to a dictionary for external usage
+    def toDict(self):
+        import copy
+        data = copy.deepcopy(self.maze)
+        for y in range(len(data)):
+            for x in range(len(data[0])):
+                if 'reward' in data[y][x]:
+                    del data[y][x]['reward']
+                if (y, x) in self.policy:
+                    data[y][x]['policy'] = self.policy[(y, x)]
+        return data
+            
                                           
 if __name__ == '__main__':
     m = MazeCSV('maps/sample1.csv')

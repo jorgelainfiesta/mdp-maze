@@ -43,4 +43,4 @@ if __name__ == '__main__':
     solver = MDPSolver(m)
     solver.calculateValues()
     m.printMap()
-    m.toCSV("policies/sample0.csv")
+    m.toDict()
