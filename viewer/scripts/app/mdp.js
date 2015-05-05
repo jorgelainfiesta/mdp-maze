@@ -1,10 +1,11 @@
 define(['jquery', './data'], function ($, data) {
   //Stat connection and keep updating
-  var start = function(){
-    $.ajax(data.get('opts.host') + "/solve")
+  var solve = function(mazeDesc){
+    $.ajax(data.get('opts.host') + "/solve", {data: {'maze' : mazeDesc}})
     .then(function(response){
       data.set('matrix', response);
-        console.log(response)
+//        console.log(response);
+      data.set('update', true);
       //Start updating each 300ms
 //      setInterval(update, data.get('opts.interval'));
     }, function(fail){
@@ -26,5 +27,5 @@ define(['jquery', './data'], function ($, data) {
     });
   };
   
-  return {start: start};
+  return {solve: solve};
 });

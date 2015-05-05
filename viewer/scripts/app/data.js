@@ -1,13 +1,21 @@
 define(['./opts'], function (opts) {
   var data = {
     matrix:  [
-      [1, 1, 1, 1],
-      [2, 2, 2, 2]
+      []
     ],
     colors: {
       wall : 0x333333,
       empty : 0xffffff,
-      car: 0xff00ff 
+      absorbent: 0xff5800,
+      background: 0xfafafa,
+      text: "rgba(255, 255, 255, 0.8)",
+    },
+    update: true,
+    sprites: {
+      up: 'images/up.png',
+      down: 'images/down.png',
+      left: 'images/left.png',
+      right: 'images/right.png'
     },
     opts: opts
   };

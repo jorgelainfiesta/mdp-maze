@@ -1,7 +1,32 @@
 body, html {
-  background: #1c1c1c;
+  background: #fafafa;
+  font-family: "Source Sans Pro", sans-serif;
+
 }
 canvas {
   display: block;
   margin: 30px auto;
 }
+button, input {
+  border: 0;
+  outline: 0;
+  padding: 15px 20px;
+  font-size: 16px;
+}
+input { 
+  background: #e0e0e0;
+  border-bottom: 1px solid #bbb;
+}
+header button {
+  cursor: pointer;
+  background: #325380;
+  color: #fff;
+  border-bottom: 1px solid #152a46;
+}
+
+nav.secondary button {
+  padding: 10px 15px;
+  background: #ccc;
+  border-bottom: 1px solid #aaa;
+}
+

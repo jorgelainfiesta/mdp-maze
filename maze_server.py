@@ -16,8 +16,8 @@ class MazeServer(object):
         if maze or True:
             #Build and solve Maze from raw line
             try:
-#                m = MazeCSV(maze, True)
-                m = MazeCSV('maps/sample0.csv')
+                print(maze)
+                m = MazeCSV(maze, True)
                 solver = MDPSolver(m)
                 solver.calculateValues()
                 return m.toDict()

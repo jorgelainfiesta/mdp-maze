@@ -34,7 +34,7 @@ class MazeCSV (MProblem):
             rawline = f.readline().split(",")
             f.close()
         else:
-            rawline = url
+            rawline = url.split(",")
         #Read rows and cols count
         rows = int(rawline[0].strip())
         cols = int(rawline[1].strip())
