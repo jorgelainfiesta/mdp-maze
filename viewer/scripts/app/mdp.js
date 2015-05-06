@@ -4,10 +4,8 @@ define(['jquery', './data'], function ($, data) {
     $.ajax(data.get('opts.host') + "/solve", {data: {'maze' : mazeDesc}})
     .then(function(response){
       data.set('matrix', response);
-//        console.log(response);
+      data.set('simulation.running', false);
       data.set('update', true);
-      //Start updating each 300ms
-//      setInterval(update, data.get('opts.interval'));
     }, function(fail){
       alert('Connection fail');
       console.log(fail);
@@ -15,10 +13,23 @@ define(['jquery', './data'], function ($, data) {
   };
   
   //Update function
-  var update = function(){
-    $.ajax(data.get('opts.host') + "/update")
+  var counter = 0;
+  
+  var move = function(x, y){
+    $.ajax(data.get('opts.host') + "/move", {data: {'x' : x, 'y' : y}})
     .then(function(response){
-      data.set('matrix', JSON.parse(response));
+      data.set('simulation.running', true);
+      data.set('simulation.y', response[0]);
+      data.set('simulation.x', response[1]);
+      data.set('update', true);
+      var ncolor = (counter % 2 == 0) ? 0x3c64af : 0x3c85af;
+      data.set('colors.simulate', ncolor);
+      counter++;
+      if(Math.abs(data.get('matrix')[response[0]][response[1]]['val']) != 100){
+        window.setTimeout(move, 2000, data.get('simulation.x'), data.get('simulation.y'));
+      } else {
+        window.clearTimeout();
+      }
     }, function(fail){
       alert('Connection fail');
       console.log(fail);
@@ -27,5 +38,5 @@ define(['jquery', './data'], function ($, data) {
     });
   };
   
-  return {solve: solve};
+  return {solve: solve, move: move};
 });

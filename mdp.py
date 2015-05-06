@@ -13,7 +13,6 @@ class MDPSolver:
         #While there are changes in value calculations
         while changes > 0:
             changes = 0
-            print("----------")
             #Iterate every possible state
             for state in p.states():
                 #Apply all possible actions (keep track of the max)
@@ -43,4 +42,4 @@ if __name__ == '__main__':
     solver = MDPSolver(m)
     solver.calculateValues()
     m.printMap()
-    m.toDict()
+    print(m.probMove((0, 0), 'right'))

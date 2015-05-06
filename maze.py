@@ -166,13 +166,34 @@ class MazeCSV (MProblem):
                 if (y, x) in self.policy:
                     data[y][x]['policy'] = self.policy[(y, x)]
         return data
+    
+    #Apply action a to state s1 considering probability
+    def probMove(self, s1, a):
+        #Randomly select which possible action will occur
+        import random
+        rand = random.random()
+        print("Rand %s" % rand)
+        if rand < self.distribution[0]:
+            return self.move(s1, self.actionsDesc[a][0])
+        elif rand > self.distribution[0] and rand < self.distribution[0] + self.distribution[1]:
+            return self.move(s1, self.actionsDesc[a][1])
+        else:
+            return self.move(s1, self.actionsDesc[a][2])
+        
+    
+    #Takes from current state to a goal following the policy
+    def advanceToGoal(self, state):
+        y, x = state
+        pol = self.policy[state]
+        return self.probMove(state, pol)
             
                                           
 if __name__ == '__main__':
-    m = MazeCSV('maps/sample1.csv')
+    m = MazeCSV('maps/sample0.csv')
     m.applyAction((0, 0), 'up')
     trm.transitionProb((0,0), 'up', (5,5))
     m.printMap()
+    
 #    print(m.move((4, 1), 'up'))
 #    print(m.move((4, 1), 'down'))
 #    print(m.move((4, 1), 'left'))

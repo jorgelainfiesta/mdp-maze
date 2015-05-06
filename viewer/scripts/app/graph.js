@@ -17,46 +17,69 @@ define(['pixi', './data', 'color'], function (PIXI, data, Color) {
           arrows.removeChild(arrows.children[i]);
       };
       
-      var color = 0xffffff;
+      var color;
       for (var i = 0; i < matrix.length; i++){
         for(var j = 0; j < matrix[0].length; j++){
-          var normal = false;
           
           if(!matrix[i][j]['val']){
-            color = data.get('colors.background');
+          //If it's a wall
+            color = data.get('colors.wall');
           } else if(matrix[i][j]['val'] == 100 || matrix[i][j]['val'] == -100) {
+          //If it's an absorbing state
             color = data.get('colors.absorbent');
             var richText = new PIXI.Text(matrix[i][j]['val'].toFixed(), {fill: data.get('text')});
-            richText.x = size*j + 10;
-            richText.y = size*i + 10;
+            richText.x = size*j + 20;
+            richText.y = size*i + 30;
             numbers.addChild(richText);
+            
+            if(data.get('simulation.running') && i == data.get('simulation.y') && j == data.get('simulation.x')){
+              color = data.get('colors.simulate');
+            }
           } else {
-            var pColor = Color("#b3d88e");
-            color = "0x"+pColor.darken(matrix[i][j]['val'] * 0.5).toHex();
-            normal = true;
+          //Otherwise, it's a normal state
+            if(data.get('simulation.running')){
+              if(i == data.get('simulation.y') && j == data.get('simulation.x')){
+                color = data.get('colors.simulate');
+                
+              } else {
+                color = 0xcccccc;
+              }
+              //Arrows
+              var button;
+              switch(matrix[i][j]['policy']){
+                  case 'up' : button = new PIXI.Sprite(upButton); break;
+                  case 'down' : button = new PIXI.Sprite(downButton); break;
+                  case 'left' : button = new PIXI.Sprite(leftButton); break;
+                  case 'right' : button = new PIXI.Sprite(rightButton); break;
+              };
+              button.x = size*j + 30;
+              button.y = size*i + 30;
+              arrows.addChild(button);
+            } else {
+              var pColor = Color("#b3d88e");
+              color = "0x"+pColor.darken(matrix[i][j]['val'] * 0.5).toHex();
+              var style = {fill: "#fff", opacity: 0.5};
+              var richText = new PIXI.Text(matrix[i][j]['val'].toFixed(), style);
+              richText.x = size*j + 10;
+              richText.y = size*i + 10;
+              numbers.addChild(richText);
+              //Arrows
+              var button;
+              switch(matrix[i][j]['policy']){
+                  case 'up' : button = new PIXI.Sprite(upButton); break;
+                  case 'down' : button = new PIXI.Sprite(downButton); break;
+                  case 'left' : button = new PIXI.Sprite(leftButton); break;
+                  case 'right' : button = new PIXI.Sprite(rightButton); break;
+              };
+              button.x = size*j + 30;
+              button.y = size*i + 45;
+              arrows.addChild(button);
+            }
           }
           graphics.beginFill(color, 1);
           graphics.drawRect(size*j, size*i, size, size);
           graphics.endFill();
           
-          if(normal){
-            var style = {fill: "#fff", opacity: 0.5};
-            var richText = new PIXI.Text(matrix[i][j]['val'].toFixed(), style);
-            richText.x = size*j + 10;
-            richText.y = size*i + 10;
-            numbers.addChild(richText);
-            //Arrows
-            var button;
-            switch(matrix[i][j]['policy']){
-                case 'up' : button = new PIXI.Sprite(upButton); break;
-                case 'down' : button = new PIXI.Sprite(downButton); break;
-                case 'left' : button = new PIXI.Sprite(leftButton); break;
-                case 'right' : button = new PIXI.Sprite(rightButton); break;
-            };
-            button.x = size*j + 30;
-            button.y = size*i + 45;
-            arrows.addChild(button);
-          }
         }
       }
       data.set('update', false);

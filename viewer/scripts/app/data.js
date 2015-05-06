@@ -9,6 +9,7 @@ define(['./opts'], function (opts) {
       absorbent: 0xff5800,
       background: 0xfafafa,
       text: "rgba(255, 255, 255, 0.8)",
+      simulate: 0x3c64af
     },
     update: true,
     sprites: {
@@ -16,6 +17,11 @@ define(['./opts'], function (opts) {
       down: 'images/down.png',
       left: 'images/left.png',
       right: 'images/right.png'
+    },
+    simulation: {
+      running: false,
+      x: -1,
+      y: -1
     },
     opts: opts
   };

@@ -13,18 +13,30 @@ class MazeServer(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def solve(self, maze = None):
-        if maze or True:
+        if maze:
             #Build and solve Maze from raw line
             try:
                 print(maze)
                 m = MazeCSV(maze, True)
                 solver = MDPSolver(m)
                 solver.calculateValues()
-                return m.toDict()
+                #Quick fix
+                self.maze = m
+#                cherrypy.session['maze'] = m
+                return self.maze.toDict()
             except Exception:
                 return {'error' : 'An error occurred while procesing the maze'}
         else:
             return {'error' : 'No map was sent'}
+    
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def move(self, y, x):
+        if y and y.isdigit() and x and x.isdigit():
+            m = self.maze
+            return m.advanceToGoal((int(y), int(x)))
+        else:
+            return {'error' : 'No position was sent'}
 
 server_ip = 'localhost'
 server_port = 8080
@@ -36,6 +48,7 @@ config = {
 		'tools.staticdir.dir': PATH,
 		'tools.staticdir.index': 'index.html',
 		'cors.expose.on': True,
+        'tools.sessions.on': True
 	}
 }
 
