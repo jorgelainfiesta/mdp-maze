@@ -9,7 +9,7 @@ define(['./opts'], function (opts) {
       absorbent: 0xff5800,
       background: 0xfafafa,
       text: "rgba(255, 255, 255, 0.8)",
-      simulate: 0x3c64af
+      simulate: 0x3c85af
     },
     update: true,
     sprites: {

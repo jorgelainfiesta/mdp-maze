@@ -19,9 +19,13 @@ define(['jquery', './mdp', './graph', './data'], function ($, mdp, graph, data) 
     e.preventDefault();
     var x = $(this).find('[name=posx]').val();
     var y = $(this).find('[name=posy]').val();
-    alert( data.get('matrix[0].length') +"  " +  data.get('matrix.length'));
     if(x >= 0 && y >= 0 && x < data.get('matrix[0].length') && y < data.get('matrix.length') && data.get('matrix')[y][x]['val'] != null && Math.abs(data.get('matrix')[y][x]['val']) != 100){
-      mdp.move(x, y);
+//      mdp.move(x, y);
+      data.set('simulation.running', true);
+      data.set('simulation.y', y);
+      data.set('simulation.x', x);
+      data.set('update', true);
+      window.setTimeout(mdp.move, 2000, data.get('simulation.x'), data.get('simulation.y'));
     } else {
       alert("Invalid position");
     }

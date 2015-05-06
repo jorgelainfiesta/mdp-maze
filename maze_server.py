@@ -22,7 +22,6 @@ class MazeServer(object):
                 solver.calculateValues()
                 #Quick fix
                 self.maze = m
-#                cherrypy.session['maze'] = m
                 return self.maze.toDict()
             except Exception:
                 return {'error' : 'An error occurred while procesing the maze'}

@@ -56,7 +56,7 @@ class MazeCSV (MProblem):
                     if abs(cost) == self.absorbent:
                         row.append({'val' :  cost, 'reward' : cost})
                     else:
-                        row.append({'val' :  0, 'reward' : -1*cost})
+                        row.append({'val' :  0, 'reward' : cost})
                         
                 else:
                     row.append({'val' : None})
