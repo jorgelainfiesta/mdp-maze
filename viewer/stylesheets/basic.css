@@ -17,16 +17,26 @@ input {
   background: #e0e0e0;
   border-bottom: 1px solid #bbb;
 }
-header button {
+ button {
   cursor: pointer;
   background: #325380;
   color: #fff;
   border-bottom: 1px solid #152a46;
 }
 
-nav.secondary button {
+.secondary { 
+  font-size: 18px;
+  display: none;
+}
+
+button.back {
   padding: 10px 15px;
-  background: #ccc;
+  background: #e6e6e6;
+  color: #999;
   border-bottom: 1px solid #aaa;
 }
 
+
+input[name=maze] {
+  width: 80%;
+}

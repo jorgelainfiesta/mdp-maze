@@ -12,6 +12,10 @@ define(['pixi', './data', 'color'], function (PIXI, data, Color) {
       for (var i = numbers.children.length - 1; i >= 0; i--) {
           numbers.removeChild(numbers.children[i]);
       };
+      //Remove old arrows
+      for (var i = arrows.children.length - 1; i >= 0; i--) {
+          arrows.removeChild(arrows.children[i]);
+      };
       
       var color = 0xffffff;
       for (var i = 0; i < matrix.length; i++){
@@ -57,7 +61,6 @@ define(['pixi', './data', 'color'], function (PIXI, data, Color) {
       }
       data.set('update', false);
     }
-    
   },
   graphics = new PIXI.Graphics();
   //Add graphics to container

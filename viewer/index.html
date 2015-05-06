@@ -12,11 +12,16 @@
                  <input type="text" name="maze" placeholder="Coloca aquí la descripción del mapa">
                  <button type="submit">Upload map</button>
              </form>
+             <nav class="secondary">
+              <button class="back">&laquo;</button>
+               <form class="simulate">
+                 <label>A partir de un punto: </label>
+                 (<input type="number" name="posx" placeholder="x">, <input type="number" name="posy" placeholder="y">)
+                 <button type="submit">Simular</button>
+               </form>
+	         </nav>
 	     </header>
-	     <nav class="secondary">
-	         <button>Heat Map</button>
-	         <button>Policy</button>
-	     </nav>
+	     
 		<script src="scripts/lib/require.js" data-main="scripts/app.js"></script>
 	</body>
 </html>

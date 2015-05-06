@@ -1,7 +1,7 @@
 define({
   // scene
-  swidth: 800,
-  sheight: 600,
+  swidth: window.innerWidth,
+  sheight: window.innerHeight,
   host: 'http://localhost:8080',
   interval: 300
 });
